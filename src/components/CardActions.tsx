@@ -96,8 +96,9 @@ export const CardActions: React.FC<CardActionsProps> = ({ card, onActionComplete
     const ics = generateICS(
       eventName,
       date,
-      card.extracted_data.time,
-      card.extracted_data.location
+      // card.extracted_data.time may be null — convert null to undefined to match generateICS signature
+      card.extracted_data.time ?? undefined,
+      card.extracted_data.location ?? undefined
     );
 
     downloadFile(ics, `${eventName}.ics`, 'text/calendar');
