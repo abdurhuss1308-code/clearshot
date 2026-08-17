@@ -2,7 +2,8 @@
 
 Turn every screenshot into a one-tap action card.
 
-Clearshot transforms your screenshot backlog into sorted, actionable cards. Upload dozens at once, let AI read them, and clear your queue with single taps—buy it, call it, calendar it, or file it.
+Clearshot transforms your screenshot backlog into sorted, actionable cards. Upload dozens at once, let AI read them, and clear your queue with single taps—buy it, call it, calendar it, or file it
+
 
 ## Quick Start
 
@@ -79,4 +80,4 @@ src/
 
 ## Design Philosophy
 
-Clearshot's UI is calm, clear, and quietly confident—the visual opposite of a cluttered camera roll. We emphasize the relief of an empty queue and the satisfaction of clearing your backlog, not the technology underneath.
+Clearshot's UI is calm, clear, and quietly confident—the visual opposite of a cluttered camera roll. We emphasize the relief of an empty queue and the satisfaction of clearing your backlog, not [...]
