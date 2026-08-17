@@ -56,7 +56,9 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
         if (items[i].kind === 'file' && items[i].type.startsWith('image/')) {
           const file = items[i].getAsFile();
           if (file) {
-            handleFileSelect(new DataTransfer().add(file).items);
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            handleFileSelect(dt.items);
           }
         }
       }
@@ -93,7 +95,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
         const thumbnailPath = `${user.id}/${cardId}_thumb.jpg`;
 
         // Generate thumbnail
-        const thumbnail = await generateThumbnail(file);
+        const generatedThumbnail = await generateThumbnail(file);
 
         // Convert image to base64 for categorization
         const base64Image = await fileToBase64(file);

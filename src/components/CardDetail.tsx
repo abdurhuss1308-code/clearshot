@@ -7,19 +7,9 @@ interface CardDetailProps {
   card: CardType;
   isOpen: boolean;
   onClose: () => void;
-  onAction: (actionType: string) => void;
 }
 
-const categoryColors: Record<CardCategory, string> = {
-  shopping: 'bg-shopping',
-  travel: 'bg-travel',
-  contact: 'bg-contact',
-  note: 'bg-note',
-  task: 'bg-task',
-  other: 'bg-other',
-};
-
-export const CardDetail: React.FC<CardDetailProps> = ({ card, isOpen, onClose, onAction }) => {
+export const CardDetail: React.FC<CardDetailProps> = ({ card, isOpen, onClose }) => {
   const { updateCard } = useCards();
   const [editedData, setEditedData] = useState<ExtractedData>(card.extracted_data);
   const [selectedCategory, setSelectedCategory] = useState<CardCategory | null>(card.category || 'other');
@@ -42,7 +32,7 @@ export const CardDetail: React.FC<CardDetailProps> = ({ card, isOpen, onClose, o
 
   if (!isOpen) return null;
 
-  const lowConfidence = card.confidence !== null && card.confidence < 0.6;
+  const lowConfidence = card.confidence !== null && card.confidence !== undefined && card.confidence < 0.6;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-end md:items-center justify-center p-4 md:p-8">
@@ -121,7 +111,7 @@ export const CardDetail: React.FC<CardDetailProps> = ({ card, isOpen, onClose, o
             </div>
 
             {/* Confidence info */}
-            {card.confidence !== null && (
+            {card.confidence !== null && card.confidence !== undefined && (
               <div className="text-sm text-taupe">
                 <span className="font-medium">Confidence:</span> {(card.confidence * 100).toFixed(0)}%
               </div>

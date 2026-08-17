@@ -34,7 +34,7 @@ export const Signup: React.FC = () => {
       setLoading(true);
       await signup(email, password);
       navigate('/onboarding');
-    } catch (err) {
+    } catch {
       setError('Failed to create account. Please try again.');
     } finally {
       setLoading(false);
@@ -79,7 +79,7 @@ export const Signup: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-taupe/20 rounded-card text-charcoal placeholder-taupe focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
-              placeholder="•••••••••"
+              placeholder="••••••••"
             />
           </div>
 
@@ -90,7 +90,7 @@ export const Signup: React.FC = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full px-4 py-2 border border-taupe/20 rounded-card text-charcoal placeholder-taupe focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-600"
-              placeholder="•••••••••"
+              placeholder="••••••••"
             />
           </div>
 

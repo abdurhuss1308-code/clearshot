@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -7,7 +7,7 @@ export const Onboarding: React.FC = () => {
   const { user } = useAuth();
   const [step, setStep] = React.useState(1);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!user) {
       navigate('/login');
     }
@@ -39,7 +39,7 @@ export const Onboarding: React.FC = () => {
     {
       title: "Let's clear your backlog",
       description: 'Upload your existing screenshots and watch them transform into sorted, actionable cards.',
-      icon: '🎯',
+      icon: '🏃',
     },
   ];
 
@@ -81,7 +81,7 @@ export const Onboarding: React.FC = () => {
         <div className="space-y-3">
           {step === 3 ? (
             <button
-              onClick={() => navigate('/queue')} // Will redirect to upload flow
+              onClick={() => navigate('/queue')}
               className="w-full px-6 py-3 bg-teal-600 text-cream rounded-card font-semibold hover:bg-teal-700 transition-colors text-lg"
             >
               Upload your screenshots

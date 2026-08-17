@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card as CardType, CardCategory } from '../types';
-import { AlertCircle, Trash2, CheckCircle, Phone, Mail } from 'lucide-react';
-import { useCards } from '../contexts/CardContext';
+import { AlertCircle } from 'lucide-react';
 import { CardActions } from './CardActions';
-import { generateICS, generateVCF, downloadFile } from '../utils/fileGeneration';
 
 const categoryColors: Record<CardCategory, { bg: string; text: string; label: string }> = {
   shopping: { bg: 'bg-shopping', text: 'text-white', label: 'Shopping' },
@@ -24,12 +22,9 @@ interface CardItemProps {
 export const CardItem: React.FC<CardItemProps> = ({ card, onClick, onAction, isAnimating }) => {
   const categoryColor = card.category ? categoryColors[card.category] : categoryColors.other;
   const isProcessing = card.status === 'processing';
-  const isFailed = card.status === 'failed';
-  const lowConfidence = card.confidence !== null && card.confidence < 0.6;
-  const [showActions, setShowActions] = useState(false);
+  const lowConfidence = card.confidence !== null && card.confidence !== undefined && card.confidence < 0.6;
 
   const handleActionComplete = () => {
-    setShowActions(false);
     onAction();
   };
 

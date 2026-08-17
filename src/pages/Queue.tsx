@@ -9,7 +9,6 @@ import { CardCategory } from '../types';
 export const Queue: React.FC = () => {
   const { getCardsByState } = useCards();
   const [filter, setFilter] = useState<'all' | CardCategory>('all');
-  const [animatingCardId, setAnimatingCardId] = useState<string | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
   const activeCards = getCardsByState('active');
@@ -28,9 +27,6 @@ export const Queue: React.FC = () => {
   };
 
   const handleCardAction = () => {
-    // When a card action completes, it's removed from active state
-    // So we animate it out and close the detail if open
-    setAnimatingCardId(null);
     setSelectedCardId(null);
   };
 
@@ -86,7 +82,6 @@ export const Queue: React.FC = () => {
                     card={card}
                     onClick={() => handleCardClick(card.id)}
                     onAction={handleCardAction}
-                    isAnimating={animatingCardId === card.id}
                   />
                 ))}
               </div>
@@ -108,7 +103,6 @@ export const Queue: React.FC = () => {
           card={selectedCard}
           isOpen={!!selectedCard}
           onClose={() => setSelectedCardId(null)}
-          onAction={() => {}}
         />
       )}
     </main>
