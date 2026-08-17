@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { CardProvider } from './contexts/CardContext';
 import { Navigation } from './components/Navigation';
+import { UploadModal } from './components/UploadModal';
 import { Landing } from './pages/Landing';
 import { Signup } from './pages/Auth/Signup';
 import { Login } from './pages/Auth/Login';
@@ -39,6 +40,7 @@ function AppRoutes() {
   return (
     <>
       <Navigation onAddScreenshots={() => setShowUploadModal(true)} />
+      <UploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
       <Routes>
         <Route path="/queue" element={<Queue />} />
         <Route path="/archive" element={<Archive />} />

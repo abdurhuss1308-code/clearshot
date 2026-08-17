@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCards } from '../contexts/CardContext';
+import { CardItem } from '../components/CardItem';
+import { SkeletonCard } from '../components/SkeletonCard';
+import { FilterTabs } from '../components/FilterTabs';
+import { CardCategory } from '../types';
 
 export const Queue: React.FC = () => {
   const { getCardsByState } = useCards();
+  const [filter, setFilter] = useState<'all' | CardCategory>('all');
+  const [animatingCardId, setAnimatingCardId] = useState<string | null>(null);
+
   const activeCards = getCardsByState('active');
+  const filteredCards = filter === 'all'
+    ? activeCards
+    : activeCards.filter(card => card.category === filter);
+
+  const processingCards = filteredCards.filter(card => card.status === 'processing');
+  const readyCards = filteredCards.filter(card => card.status === 'ready');
+  const failedCards = filteredCards.filter(card => card.status === 'failed');
+
+  const handleCardClick = (cardId: string) => {
+    // In Phase 3, this will open the card detail view
+    console.log('Card clicked:', cardId);
+  };
 
   return (
     <main className="min-h-screen bg-cream md:ml-48 pb-20 md:pb-0">
@@ -16,15 +35,57 @@ export const Queue: React.FC = () => {
             </div>
             <h2 className="text-2xl font-bold text-charcoal text-center">You're all caught up</h2>
             <p className="text-taupe text-center max-w-sm">Nothing waiting. Good work clearing your backlog.</p>
-            <button className="mt-4 px-6 py-2 bg-teal-600 text-cream rounded-card font-medium hover:bg-teal-700 transition-colors">
-              Add screenshots
-            </button>
           </div>
         ) : (
-          // Active Cards List (placeholder)
-          <div className="space-y-4">
+          // Active Cards List
+          <div>
             <h2 className="text-2xl font-bold text-charcoal mb-6">Your queue</h2>
-            {/* Cards will be rendered here in Phase 2 */}
+
+            {/* Filter tabs */}
+            <FilterTabs activeFilter={filter} onFilterChange={setFilter} />
+
+            {/* Processing cards with skeleton loaders */}
+            {processingCards.length > 0 && (
+              <div className="space-y-3 mb-6">
+                {processingCards.map((card) => (
+                  <CardItem
+                    key={card.id}
+                    card={card}
+                    onClick={() => handleCardClick(card.id)}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Add skeleton loaders for visual feedback */}
+            {processingCards.length > 0 && processingCards.length < readyCards.length + 2 && (
+              <div className="space-y-3 mb-6">
+                {[...Array(Math.min(3, 10 - (processingCards.length + readyCards.length)))].map((_, i) => (
+                  <SkeletonCard key={`skeleton-${i}`} />
+                ))}
+              </div>
+            )}
+
+            {/* Ready cards */}
+            {readyCards.length > 0 && (
+              <div className="space-y-3">
+                {readyCards.map((card) => (
+                  <CardItem
+                    key={card.id}
+                    card={card}
+                    onClick={() => handleCardClick(card.id)}
+                    isAnimating={animatingCardId === card.id}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Failed cards message */}
+            {failedCards.length > 0 && (
+              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-card text-red-700 text-sm">
+                {failedCards.length} card(s) failed to process. Please try uploading them again.
+              </div>
+            )}
           </div>
         )}
       </div>
