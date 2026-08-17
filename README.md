@@ -81,3 +81,6 @@ src/
 ## Design Philosophy
 
 Clearshot's UI is calm, clear, and quietly confident—the visual opposite of a cluttered camera roll. We emphasize the relief of an empty queue and the satisfaction of clearing your backlog, not [...]
+
+
+<!-- redeploy-trigger: 2026-08-17 07:02 UTC -->
