@@ -21,8 +21,9 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dragOverRef = useRef(false);
 
-  const handleFileSelect = (newFiles: FileList) => {
-    const imageFiles = Array.from(newFiles).filter((file) => {
+  const handleFileSelect = (newFiles: FileList | File[]) => {
+    const fileArray = Array.isArray(newFiles) ? newFiles : Array.from(newFiles);
+    const imageFiles = fileArray.filter((file) => {
       if (!isImageFile(file)) {
         setErrors((prev) => [...prev, `${file.name} is not a valid image file`]);
         return false;
@@ -52,15 +53,17 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
   const handlePaste = (e: React.ClipboardEvent) => {
     const items = e.clipboardData?.items;
     if (items) {
+      const files: File[] = [];
       for (let i = 0; i < items.length; i++) {
         if (items[i].kind === 'file' && items[i].type.startsWith('image/')) {
           const file = items[i].getAsFile();
           if (file) {
-            const dt = new DataTransfer();
-            dt.items.add(file);
-            handleFileSelect(dt.items);
+            files.push(file);
           }
         }
+      }
+      if (files.length > 0) {
+        handleFileSelect(files);
       }
     }
   };

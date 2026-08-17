@@ -164,7 +164,6 @@ export const Archive: React.FC = () => {
           card={selectedCard}
           isOpen={!!selectedCard}
           onClose={() => setSelectedCardId(null)}
-          onAction={handleCardAction}
         />
       )}
     </main>

@@ -136,9 +136,9 @@ export const CardActions: React.FC<CardActionsProps> = ({ card, onActionComplete
     const name = card.extracted_data.name || 'Contact';
     const vcf = generateVCF(
       name,
-      card.extracted_data.phone,
-      card.extracted_data.email,
-      card.extracted_data.address
+      card.extracted_data.phone || undefined,
+      card.extracted_data.email || undefined,
+      card.extracted_data.address || undefined
     );
 
     downloadFile(vcf, `${name}.vcf`, 'text/vcard');
@@ -206,8 +206,7 @@ export const CardActions: React.FC<CardActionsProps> = ({ card, onActionComplete
   };
 
   const handleReviewAndCategorize = () => {
-    // This will open the CardDetail modal in the parent component
-    onActionComplete(); // For now, just close
+    onActionComplete();
   };
 
   return (
