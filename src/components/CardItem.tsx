@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card as CardType, CardCategory } from '../types';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Trash2, CheckCircle, Phone, Mail } from 'lucide-react';
+import { useCards } from '../contexts/CardContext';
+import { CardActions } from './CardActions';
+import { generateICS, generateVCF, downloadFile } from '../utils/fileGeneration';
 
 const categoryColors: Record<CardCategory, { bg: string; text: string; label: string }> = {
   shopping: { bg: 'bg-shopping', text: 'text-white', label: 'Shopping' },
@@ -14,23 +17,29 @@ const categoryColors: Record<CardCategory, { bg: string; text: string; label: st
 interface CardItemProps {
   card: CardType;
   onClick: () => void;
+  onAction: () => void;
   isAnimating?: boolean;
 }
 
-export const CardItem: React.FC<CardItemProps> = ({ card, onClick, isAnimating }) => {
+export const CardItem: React.FC<CardItemProps> = ({ card, onClick, onAction, isAnimating }) => {
   const categoryColor = card.category ? categoryColors[card.category] : categoryColors.other;
   const isProcessing = card.status === 'processing';
   const isFailed = card.status === 'failed';
   const lowConfidence = card.confidence !== null && card.confidence < 0.6;
+  const [showActions, setShowActions] = useState(false);
+
+  const handleActionComplete = () => {
+    setShowActions(false);
+    onAction();
+  };
 
   return (
     <div
-      onClick={onClick}
       className={`bg-white rounded-card shadow-card p-4 cursor-pointer hover:shadow-lg transition-all ${
         isAnimating ? 'animate-slide-out' : 'hover:scale-102'
       }`}
     >
-      <div className="flex gap-4">
+      <div onClick={onClick} className="flex gap-4">
         {/* Thumbnail */}
         <div className="flex-shrink-0 w-20 h-20 bg-taupe/10 rounded-card overflow-hidden">
           {card.thumbnail_path ? (
@@ -92,6 +101,13 @@ export const CardItem: React.FC<CardItemProps> = ({ card, onClick, isAnimating }
           )}
         </div>
       </div>
+
+      {/* Action buttons */}
+      {!isProcessing && (
+        <div className="mt-4 pt-4 border-t border-taupe/10">
+          <CardActions card={card} onActionComplete={handleActionComplete} />
+        </div>
+      )}
     </div>
   );
 };

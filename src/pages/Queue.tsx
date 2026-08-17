@@ -3,25 +3,35 @@ import { useCards } from '../contexts/CardContext';
 import { CardItem } from '../components/CardItem';
 import { SkeletonCard } from '../components/SkeletonCard';
 import { FilterTabs } from '../components/FilterTabs';
+import { CardDetail } from '../components/CardDetail';
 import { CardCategory } from '../types';
 
 export const Queue: React.FC = () => {
   const { getCardsByState } = useCards();
   const [filter, setFilter] = useState<'all' | CardCategory>('all');
   const [animatingCardId, setAnimatingCardId] = useState<string | null>(null);
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
   const activeCards = getCardsByState('active');
   const filteredCards = filter === 'all'
     ? activeCards
     : activeCards.filter(card => card.category === filter);
 
+  const selectedCard = activeCards.find(card => card.id === selectedCardId);
+
   const processingCards = filteredCards.filter(card => card.status === 'processing');
   const readyCards = filteredCards.filter(card => card.status === 'ready');
   const failedCards = filteredCards.filter(card => card.status === 'failed');
 
   const handleCardClick = (cardId: string) => {
-    // In Phase 3, this will open the card detail view
-    console.log('Card clicked:', cardId);
+    setSelectedCardId(cardId);
+  };
+
+  const handleCardAction = () => {
+    // When a card action completes, it's removed from active state
+    // So we animate it out and close the detail if open
+    setAnimatingCardId(null);
+    setSelectedCardId(null);
   };
 
   return (
@@ -52,6 +62,7 @@ export const Queue: React.FC = () => {
                     key={card.id}
                     card={card}
                     onClick={() => handleCardClick(card.id)}
+                    onAction={handleCardAction}
                   />
                 ))}
               </div>
@@ -74,6 +85,7 @@ export const Queue: React.FC = () => {
                     key={card.id}
                     card={card}
                     onClick={() => handleCardClick(card.id)}
+                    onAction={handleCardAction}
                     isAnimating={animatingCardId === card.id}
                   />
                 ))}
@@ -89,6 +101,16 @@ export const Queue: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Card Detail Modal */}
+      {selectedCard && (
+        <CardDetail
+          card={selectedCard}
+          isOpen={!!selectedCard}
+          onClose={() => setSelectedCardId(null)}
+          onAction={() => {}}
+        />
+      )}
     </main>
   );
 };
