@@ -7,6 +7,7 @@ import { UploadModal } from './components/UploadModal';
 import { Landing } from './pages/Landing';
 import { Signup } from './pages/Auth/Signup';
 import { Login } from './pages/Auth/Login';
+import { Onboarding } from './pages/Onboarding';
 import { Queue } from './pages/Queue';
 import { Archive } from './pages/Archive';
 import { Settings } from './pages/Settings';
@@ -42,6 +43,7 @@ function AppRoutes() {
       <Navigation onAddScreenshots={() => setShowUploadModal(true)} />
       <UploadModal isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
       <Routes>
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/queue" element={<Queue />} />
         <Route path="/archive" element={<Archive />} />
         <Route path="/settings" element={<Settings />} />
